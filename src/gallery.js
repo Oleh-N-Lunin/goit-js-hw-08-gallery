@@ -1,28 +1,11 @@
 import galleryItems from "./gallery-items.js";
 
-/*
-<li class="gallery__item">
-  <a
-    class="gallery__link"
-    href="https://cdn.pixabay.com/photo/2010/12/13/10/13/tulips-2546_1280.jpg"
-  >
-    <img
-      class="gallery__image"
-      src="https://cdn.pixabay.com/photo/2010/12/13/10/13/tulips-2546__340.jpg"
-      data-source="https://cdn.pixabay.com/photo/2010/12/13/10/13/tulips-2546_1280.jpg"
-      alt="Tulips"
-    />
-  </a>
-</li>
-*/
-
 const refs = {
     galleryContainer: document.querySelector(".js-gallery"),
-    lightbox: document.querySelector(".js-lightbox"),
+    lightboxContainer: document.querySelector(".js-lightbox"),
     lightboxOverlay: document.querySelector(".lightbox__overlay"),
-    lightboxContent: document.querySelector(".lightbox__content"),
     lightboxImage: document.querySelector(".lightbox__image"),
-    lightboxCloseBtn: document.querySelector(".lightbox__button"),
+    lightboxCloseBtn: document.querySelector('button[data-action="close-lightbox"]'),
 };
 
 function createGalleryMarkup(items) {
@@ -46,6 +29,57 @@ function createGalleryMarkup(items) {
 }
 
 const galleryMarkup = createGalleryMarkup(galleryItems);
-
 refs.galleryContainer.insertAdjacentHTML('beforeend', galleryMarkup);
-console.log(createGalleryMarkup(galleryItems));
+
+refs.galleryContainer.addEventListener('click', onImageClick);
+function onImageClick(e) {
+    e.preventDefault();
+    if (!e.target.nodeName === "IMG") {
+        return;
+    }
+
+    refs.lightboxImage.src = e.target.dataset.source;
+    refs.lightboxImage.alt = e.target.alt;
+
+    refs.lightboxContainer.classList.add("is-open");
+}
+
+refs.lightboxContainer.addEventListener('click', closeLightboxBtn);
+function closeLightboxBtn(e) {
+    if (!refs.lightboxCloseBtn) {
+        return;
+    }
+    
+    refs.lightboxImage.src = "";
+    refs.lightboxImage.alt = "";
+
+    refs.lightboxContainer.classList.remove("is-open");
+}
+
+// Дополнительные требования
+
+refs.lightboxOverlay.addEventListener('click', onOverlayClick);
+function onOverlayClick(e) {
+    e.preventDefault();
+    if (!refs.lightboxOverlay) {
+        return;
+    }
+    
+    closeLightboxBtn();
+}
+
+window.addEventListener('keydown', onEscClose);
+function onEscClose(e) {
+    if (e.code === 'Escape') {
+        closeLightboxBtn();
+    }
+}
+
+refs.lightboxContainer.addEventListener('keydown', event => {
+    if (event.code === 37) {
+        console.log('Left was pressed');
+    }
+    else if (event.code === 39) {
+        console.log('Right was pressed');
+    }
+});
