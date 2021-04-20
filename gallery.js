@@ -44,43 +44,46 @@ function onImageClick(e) {
     refs.lightboxContainer.classList.add("is-open");
 }
 
-refs.lightboxContainer.addEventListener('click', closeLightboxBtn);
-function closeLightboxBtn(e) {
-    if (!refs.lightboxCloseBtn) {
-        return;
-    }
-    
+function closeModal() {
     refs.lightboxImage.src = "";
     refs.lightboxImage.alt = "";
 
-    refs.lightboxContainer.classList.remove("is-open");
+    refs.lightboxContainer.classList.remove("is-open")
+}
+
+refs.lightboxContainer.addEventListener('click', closeLightboxBtn);
+function closeLightboxBtn(e) {
+    if (e.target !== refs.lightboxCloseBtn) {
+        return;
+    }
+    
+    closeModal()
 }
 
 // Дополнительные требования
 
 refs.lightboxOverlay.addEventListener('click', onOverlayClick);
 function onOverlayClick(e) {
-    e.preventDefault();
-    if (!refs.lightboxOverlay) {
+    if (e.target !== refs.lightboxOverlay) {
         return;
     }
     
-    closeLightboxBtn();
+    closeModal()
 }
 
 window.addEventListener('keydown', onEscClose, true);
 function onEscClose(e) {
     if (e.code === 'Escape') {
-        closeLightboxBtn();
+        closeModal()
     }
 }
 
-refs.lightboxContainer.addEventListener('keydown',ModalKeySwipe, true);
-function ModalKeySwipe(e) {
-    if (e.code === 37) {
-        console.log('Left was pressed');
-    }
-    else if (e.code === 39) {
-        console.log('Right was pressed');
-    }
-}
+// refs.lightboxContainer.addEventListener('keydown',ModalKeySwipe, true);
+// function ModalKeySwipe(e) {
+//     if (e.code === 37) {
+//         console.log('Left was pressed');
+//     }
+//     else if (e.code === 39) {
+//         console.log('Right was pressed');
+//     }
+// }
