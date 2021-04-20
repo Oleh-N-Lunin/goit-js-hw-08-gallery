@@ -34,7 +34,7 @@ refs.galleryContainer.insertAdjacentHTML('beforeend', galleryMarkup);
 refs.galleryContainer.addEventListener('click', onImageClick);
 function onImageClick(e) {
     e.preventDefault();
-    if (!e.target.nodeName === "IMG") {
+    if (e.target.nodeName !== "IMG") {
         return;
     }
 
@@ -68,18 +68,19 @@ function onOverlayClick(e) {
     closeLightboxBtn();
 }
 
-window.addEventListener('keydown', onEscClose);
+window.addEventListener('keydown', onEscClose, true);
 function onEscClose(e) {
     if (e.code === 'Escape') {
         closeLightboxBtn();
     }
 }
 
-refs.lightboxContainer.addEventListener('keydown', event => {
-    if (event.code === 37) {
+refs.lightboxContainer.addEventListener('keydown',ModalKeySwipe, true);
+function ModalKeySwipe(e) {
+    if (e.code === 37) {
         console.log('Left was pressed');
     }
-    else if (event.code === 39) {
+    else if (e.code === 39) {
         console.log('Right was pressed');
     }
-});
+}
